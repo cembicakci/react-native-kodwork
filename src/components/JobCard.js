@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const JobCard = ({ item }) => {
+const JobCard = ({ item, onSelect }) => {
 
     return (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onSelect}>
             <View style={styles.container}>
                 <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">{item.name}</Text>
                 <Text style={styles.companyName}>{item.company.name}</Text>
