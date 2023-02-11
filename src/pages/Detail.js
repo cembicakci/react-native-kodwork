@@ -49,8 +49,9 @@ export const Detail = ({ route, navigation }) => {
                 <RenderHtml baseStyle={styles.content} contentWidth={width} source={source} />
             </View>
             <View style={styles.btnContainer}>
-                <Button text={'Submit'} onPress={() => { Alert.alert('Successfully submitted!'), navigation.navigate('Jobs') }} />
-                <Button text={'Favourite Job'} onPress={() => handleSubmit(data)} />
+                <Button text={'Submit'} iconName='export' onPress={() => { Alert.alert('Successfully submitted!'), navigation.navigate('Jobs') }} />
+                <Button text={'Favourite Job'} iconName='cards-heart' onPress={() => handleSubmit(data)} />
+
             </View>
         </ScrollView>
     )
