@@ -1,17 +1,21 @@
 import React from 'react'
 import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux';
 import JobCard from '../components/JobCard';
 import useFetch from '../hooks/useFetch'
+import { selectJob } from '../redux/slice/FavouriteSlice';
 
 const Jobs = ({ navigation }) => {
 
     const { data, error, loading } = useFetch('https://www.themuse.com/api/public/jobs?page=0');
 
+    const dispatch = useDispatch();
+
     const onSelect = (id) => {
         navigation.navigate('Detail', { id })
     }
 
-    const renderJobs = ({ item }) => <JobCard item={item} onSelect={() => onSelect(item.id)} />
+    const renderJobs = ({ item }) => <JobCard item={item} onSelect={() => { onSelect(item.id), dispatch(selectJob(item.name)) }} />
 
     if (loading) {
         return <ActivityIndicator color={'#ee5b5a'} size={'large'} style={styles.loading} />

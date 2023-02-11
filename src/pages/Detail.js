@@ -3,13 +3,18 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, useWindowDimens
 import useFetch from '../hooks/useFetch';
 import RenderHtml from 'react-native-render-html';
 import Button from '../components/Button';
+import { useDispatch, useSelector } from 'react-redux';
+import { addFavourite } from '../redux/slice/FavouriteSlice';
 
-export const Detail = ({ route }) => {
+export const Detail = ({ route, navigation }) => {
 
     const { id } = route.params;
     const { width } = useWindowDimensions()
 
     const { data, loading, error } = useFetch(`https://www.themuse.com/api/public/jobs/${id}`);
+
+    const dispatch = useDispatch();
+    const favouriteJobs = useSelector(state => state.favourite.favouriteJobs)
 
     if (loading) {
         return <ActivityIndicator color={'#ee5b5a'} size={'large'} style={styles.loading} />
@@ -23,6 +28,15 @@ export const Detail = ({ route }) => {
         html: `${data.contents}`
     };
 
+    const handleSubmit = (data) => {
+        if (favouriteJobs.find(item => item.id === data.id)) {
+            return Alert.alert('This job is already added...');
+        }
+
+        dispatch(addFavourite(data))
+        navigation.navigate('Favourite')
+    }
+
     return (
         <ScrollView style={styles.container}>
             <View style={styles.topContainer}>
@@ -35,8 +49,8 @@ export const Detail = ({ route }) => {
                 <RenderHtml baseStyle={styles.content} contentWidth={width} source={source} />
             </View>
             <View style={styles.btnContainer}>
-                <Button text={'Submit'} />
-                <Button text={'Favourite Job'} />
+                <Button text={'Submit'} onPress={() => { Alert.alert('Successfully submitted!'), navigation.navigate('Jobs') }} />
+                <Button text={'Favourite Job'} onPress={() => handleSubmit(data)} />
             </View>
         </ScrollView>
     )
